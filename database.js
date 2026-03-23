@@ -130,6 +130,9 @@ const orderStmts = {
             sql: `SELECT COUNT(*) as total FROM orders WHERE user_id = ? AND status = 'confirmed'`,
             args: [userId],
         }), 'total'),
+
+    totalRevenue: async () =>
+        scalar(await db.execute(`SELECT SUM(amount) as total FROM orders WHERE status = 'confirmed'`), 'total'),
 };
 
 // ─── JOB LOG QUERIES ──────────────────────────────────────────────────────────
@@ -152,6 +155,9 @@ const logStmts = {
             sql: `SELECT * FROM job_logs WHERE user_id = ? ORDER BY created_at DESC LIMIT 10`,
             args: [userId],
         })),
+
+    globalStats: async () =>
+        row(await db.execute(`SELECT COUNT(*) as total_jobs, SUM(channels) as total_channels FROM job_logs`)),
 };
 
 // ─── APP SETTINGS ─────────────────────────────────────────────────────────────

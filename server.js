@@ -165,6 +165,177 @@ app.get('/api/stream', requireAuth, botController.handleStream);
 app.post('/api/start', requireAuth, multer({ storage: multer.memoryStorage() }).single('attachment'), botController.handleStartJob);
 app.post('/api/stop', requireAuth, botController.handleStopJob);
 
+// ═══════════════════════════════════════════════════════════════
+//  OWNER & ADMIN ROUTES
+// ═══════════════════════════════════════════════════════════════
+
+app.get('/api/owner/stats', requireOwner, async (req, res) => {
+    try {
+        const [totalUsers, stats, revenue, activeJobsCount] = await Promise.all([
+            userStmts.countAll(),
+            logStmts.globalStats(),
+            orderStmts.totalRevenue(),
+            Promise.resolve(require('./botController').activeJobs.size)
+        ]);
+        res.json({
+            totalUsers,
+            totalJobs: stats?.total_jobs || 0,
+            totalChannels: stats?.total_channels || 0,
+            revenue: revenue || 0,
+            activeJobs: activeJobsCount
+        });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/owner/users', requireOwner, async (req, res) => {
+    try {
+        const users = await userStmts.allUsers();
+        res.json(users);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/owner/set-credits', requireOwner, async (req, res) => {
+    const { userId, credits } = req.body;
+    try {
+        await userStmts.setCredits(credits, userId);
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/owner/add-credits', requireOwner, async (req, res) => {
+    const { userId, amount } = req.body;
+    try {
+        await userStmts.addCredits(amount, userId);
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/owner/set-role', requireOwner, async (req, res) => {
+    const { userId, role } = req.body;
+    try {
+        await userStmts.setRole(role, userId);
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/owner/set-consoles', requireOwner, async (req, res) => {
+    const { userId, amount } = req.body;
+    try {
+        await userStmts.addConsoles(amount, userId);
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/owner/discount', requireOwner, (req, res) => {
+    res.json({ discount: globalDiscount });
+});
+
+app.post('/api/owner/set-discount', requireOwner, async (req, res) => {
+    const { discount } = req.body;
+    try {
+        await settingsStmts.set('shop_discount', discount);
+        globalDiscount = discount;
+        res.json({ success: true, discount });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/owner/active-jobs', requireOwner, (req, res) => {
+    const jobs = [];
+    const activeJobs = require('./botController').activeJobs;
+    for (const [jobId, job] of activeJobs) {
+        jobs.push({ jobId, userId: job.userId, clients: job.clients.size });
+    }
+    res.json(jobs);
+});
+
+app.post('/api/owner/force-stop', requireOwner, (req, res) => {
+    const { jobId } = req.body;
+    const { activeJobs } = require('./botController');
+    if (jobId) {
+        const job = activeJobs.get(jobId);
+        if (job) {
+            job.clients.forEach(c => { try { c.end(); } catch {} });
+            activeJobs.delete(jobId);
+        }
+    } else {
+        for (const [id, job] of activeJobs) {
+            job.clients.forEach(c => { try { c.end(); } catch {} });
+            activeJobs.delete(id);
+        }
+    }
+    res.json({ success: true });
+});
+
+app.delete('/api/owner/user/:id', requireOwner, async (req, res) => {
+    try {
+        await userStmts.deleteUser(req.params.id);
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/admin/orders', requireAdmin, async (req, res) => {
+    try {
+        const orders = await orderStmts.allPending();
+        res.json(orders);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/owner/confirm-order', requireOwner, async (req, res) => {
+    const { orderId } = req.body;
+    try {
+        const order = await orderStmts.getById(orderId);
+        if (!order || order.status !== 'pending') return res.status(400).json({ error: 'Order not found or not pending.' });
+        
+        await orderStmts.confirm(orderId);
+        if (order.package_id === 'more_console') {
+            await userStmts.addConsoles(1, order.user_id);
+        } else {
+            await userStmts.addCredits(order.credits, order.user_id);
+        }
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/owner/cancel-order', requireOwner, async (req, res) => {
+    const { orderId } = req.body;
+    try {
+        await orderStmts.cancel(orderId);
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/user/consoles', requireAuth, async (req, res) => {
+    try {
+        const user = await userStmts.findById(req.session.userId);
+        res.json({ extra_consoles: user.extra_consoles || 0, total: (user.extra_consoles || 0) + 1 });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/user/logs', requireAuth, async (req, res) => {
+    try {
+        const logs = await logStmts.recent(req.session.userId);
+        res.json(logs);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/shop/order-status/:id', requireAuth, async (req, res) => {
+    try {
+        const order = await orderStmts.getById(req.params.id);
+        res.json({ status: order?.status || 'not_found' });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/shop/cancel-order', requireAuth, async (req, res) => {
+    const { orderId } = req.body;
+    try {
+        const order = await orderStmts.getById(orderId);
+        if (order && order.user_id === req.session.userId) {
+            await orderStmts.cancel(orderId);
+        }
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 // ─── Start Server ─────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
