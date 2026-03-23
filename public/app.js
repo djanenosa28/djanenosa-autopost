@@ -109,10 +109,18 @@ function togglePw(id, btn) {
 function addLog(message, type = 'info') {
     const logEl = document.getElementById('liveLog');
     const now = new Date().toLocaleTimeString('id-ID');
+    
+    // Create new log entry
     const div = document.createElement('div');
     div.className = `log-e log-${type}`;
     div.innerHTML = `<span>[${now}]</span><span>${escapeHtml(message)}</span>`;
     logEl.appendChild(div);
+
+    // Keep only last 150 logs to prevent memory/UI lag
+    if (logEl.children.length > 150) {
+        logEl.removeChild(logEl.firstChild);
+    }
+
     logEl.scrollTop = logEl.scrollHeight;
 
     if (type === 'error' || type === 'stop') {

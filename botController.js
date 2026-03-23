@@ -38,6 +38,7 @@ async function sendWithRetry(jobId, token, isBot, channelId, message, fileData, 
                 try {
                     const body = await resp.json();
                     retryAfter = body.retry_after || 5;
+                    broadcastLog(jobId, 'warning', `⏳ Slow Mode ch:${channelId} — menunggu ${retryAfter.toFixed(1)}s sebelum lanjut...`);
                 } catch (_) {}
                 await new Promise(r => setTimeout(r, Math.ceil(retryAfter * 1000) + 200));
                 continue;
