@@ -22,16 +22,32 @@ const qrisUpload = multer({ storage: qrisStorage });
 const msgStorage = multer.memoryStorage();
 const msgUpload = multer({ storage: msgStorage, limits: { fileSize: 8 * 1024 * 1024 } });
 
+// ─── Security Headers ────────────────────────────────────────────────────────
+app.use((req, res, next) => {
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Permissions-Policy', 'geolocation=(), camera=(), microphone=()');
+    next();
+});
+
 // ─── Middleware ───────────────────────────────────────────────────────────────
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(cors({ origin: false })); // disable CORS for same-origin only
+app.use(express.json({ limit: '512kb' }));
+app.use(express.urlencoded({ extended: true, limit: '512kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'fallback-secret-change-me',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }, // 24h
+    name: 'sid', // hide default 'connect.sid' name
+    cookie: {
+        secure: false,        // set true if behind HTTPS
+        httpOnly: true,       // prevent JS access to cookie
+        sameSite: 'strict',   // block CSRF
+        maxAge: 24 * 60 * 60 * 1000, // 24h
+    },
 }));
 
 // ─── Auth Middleware ──────────────────────────────────────────────────────────

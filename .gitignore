@@ -1,3 +1,26 @@
+# ─── Secrets & Environment ───────────────────────
 .env
-.env.local
 .env.*
+!.env.example
+
+# ─── Database ────────────────────────────────────
+*.db
+*.db-shm
+*.db-wal
+
+# ─── Uploads ─────────────────────────────────────
+uploads/
+public/qris/
+
+# ─── Dependencies ────────────────────────────────
+node_modules/
+
+# ─── Logs ────────────────────────────────────────
+*.log
+npm-debug.log*
+
+# ─── OS / Editor ─────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
