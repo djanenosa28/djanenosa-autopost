@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Djanenosa Post Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-page">
+    <!-- Minimal Background -->
+
+    <div class="app-shell">
+        <!-- SIDEBAR -->
+        <aside class="sidebar glass">
+            <div class="sb-brand">
+                <div class="brand-icon sm">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.001.022.01.043.027.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+                </div>
+                <span class="brand-name">Djanenosa <b>Post</b></span>
+            </div>
+
+            <nav class="sb-nav">
+                <a class="nav-link active" data-page="home" onclick="navigateTo('home')">
+                    <span class="nav-icon">🏠</span><span>Home</span>
+                </a>
+                <a class="nav-link" data-page="console" onclick="navigateTo('console')">
+                    <span class="nav-icon">⚡</span><span>Console</span>
+                </a>
+                <a class="nav-link" data-page="shop" onclick="navigateTo('shop')">
+                    <span class="nav-icon">🛒</span><span>Shop</span>
+                </a>
+                <a class="nav-link" data-page="account" onclick="navigateTo('account')">
+                    <span class="nav-icon">👤</span><span>Account</span>
+                </a>
+                <a class="nav-link" data-page="help" onclick="navigateTo('help')">
+                    <span class="nav-icon">❓</span><span>Help</span>
+                </a>
+                <a class="nav-link owner-only" data-page="owner" onclick="navigateTo('owner')" id="ownerNavLink" style="display:none">
+                    <span class="nav-icon">👑</span><span>Owner</span>
+                </a>
+            </nav>
+
+            <div class="sb-footer">
+                <div class="sb-credits-pill">
+                    <span>💎</span>
+                    <span id="sbCredits">0</span>
+                    <span>credits</span>
+                </div>
+                <button class="btn-logout" onclick="logout()">Sign Out</button>
+                <div class="sb-social">
+                    <a href="https://instagram.com" target="_blank" rel="noopener" title="Instagram" class="sb-social-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://tiktok.com" target="_blank" rel="noopener" title="TikTok" class="sb-social-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.78a4.85 4.85 0 0 1-1.01-.09z"/></svg>
+                    </a>
+                    <a href="https://wa.me/62088983082523" target="_blank" rel="noopener" title="WhatsApp" class="sb-social-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+                    </a>
+                    <a href="https://discord.gg" target="_blank" rel="noopener" title="Discord" class="sb-social-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.001.022.01.043.027.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+                    </a>
+                </div>
+                <div class="sb-copyright">© 2026 Djanenosa Post.<br>All rights reserved.</div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-area">
+
+            <!-- HOME PAGE -->
+            <section class="page active" id="page-home">
+                <div class="page-header">
+                    <h2>Welcome back, <span id="homeUsername" class="highlight">User</span>!</h2>
+                    <p>Here's your activity overview</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card glass">
+                        <div class="stat-icon">💎</div>
+                        <div>
+                            <div class="stat-val" id="homeCredits">0</div>
+                            <div class="stat-lbl">Credits Remaining</div>
+                        </div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-icon">🚀</div>
+                        <div>
+                            <div class="stat-val" id="homeJobs">0</div>
+                            <div class="stat-lbl">Total Job Runs</div>
+                        </div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-icon">📨</div>
+                        <div>
+                            <div class="stat-val" id="homeChannels">0</div>
+                            <div class="stat-lbl">Messages Sent</div>
+                        </div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-icon">🛍️</div>
+                        <div>
+                            <div class="stat-val" id="homeOrders">0</div>
+                            <div class="stat-lbl">Total Orders</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">Recent Activity</div>
+                <div class="log-table glass" id="recentLogs">
+                    <div class="log-empty">No activity yet. Run your first job!</div>
+                </div>
+            </section>
+
+            <!-- CONSOLE PAGE -->
+            <section class="page" id="page-console">
+                <div class="page-header">
+                    <h2>⚡ Console</h2>
+                    <p>Configure and run your auto-poster job</p>
+                </div>
+
+                <!-- Running Consoles List -->
+                <div id="consoleListSection">
+                    <div class="section-title">🖥 Running Consoles (<span id="consoleSlotUsage">0/1</span>)</div>
+                    <div style="position:relative">
+                        <div id="consoleListGrid" class="console-list-grid"></div>
+                    </div>
+                </div>
+
+                <div class="console-layout">
+                    <div class="config-side glass">
+                        <form id="posterForm" enctype="multipart/form-data">
+                            <div class="form-field">
+                                <label>Discord Token</label>
+                                <div class="input-icon-wrap">
+                                    <input type="password" id="dcToken" placeholder="Paste your token..." required>
+                                    <button type="button" class="icon-btn" onclick="togglePw('dcToken',this)">👁️</button>
+                                </div>
+                            </div>
+                            <div class="form-row-2">
+                                <div class="form-field">
+                                    <label>Token Type</label>
+                                    <select id="dcTokenType" onchange="handleTokenWarn()">
+                                        <option value="bot">Bot Token (Safe)</option>
+                                        <option value="user">User Token (Risky)</option>
+                                    </select>
+                                </div>
+                                <div class="form-field">
+                                    <label>Attach Image</label>
+                                    <input type="file" id="dcAttachment" accept="image/*">
+                                </div>
+                            </div>
+                            <div id="tokenWarn" class="warn-box" style="display:none">⚠️ Self-botting violates Discord ToS and risks account ban.</div>
+                            <div class="form-field">
+                                <label>Channel IDs <span class="badge" id="chCount">0 channels</span></label>
+                                <textarea id="dcChannels" rows="3" placeholder="One per line or comma-separated" required onInput="countChannels()"></textarea>
+                            </div>
+                            <div class="form-field">
+                                <label>Message</label>
+                                <textarea id="dcMessage" rows="4" placeholder="Supports **bold**, *italic*, `code`..."></textarea>
+                            </div>
+                            <div class="form-row-2">
+                                <div class="form-field">
+                                    <label>Durasi Jalan (Menit)</label>
+                                    <input type="number" id="dcDuration" min="1" max="1440" value="10" required>
+                                    <small>Waktu sebelum console berhenti</small>
+                                </div>
+                                <div class="form-field">
+                                    <label>Loop Interval (sec)</label>
+                                    <input type="number" id="dcLoop" min="5" value="60" required>
+                                    <small>Jeda antar putaran</small>
+                                </div>
+                            </div>
+                            <div class="console-actions">
+                                <button type="submit" id="startBtn" class="btn-primary">🚀 Start</button>
+                            </div>
+                            <div id="consoleErr" class="form-error" style="display:none;margin-top:12px"></div>
+                        </form>
+                    </div>
+
+                    <div class="monitor-side glass">
+                        <div class="monitor-top">
+                            <span>📡 Live Log</span>
+                            <div class="badge-row">
+                                <span class="badge">Dispatched: <b id="dispatchCount">0</b></span>
+                            </div>
+                        </div>
+                        <div class="livelog" id="liveLog">
+                            <div class="log-e log-system"><span>[SYSTEM]</span><span>Awaiting configuration...</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SHOP PAGE -->
+            <section class="page" id="page-shop">
+                <div class="page-header">
+                    <h2>🛒 Shop</h2>
+                    <p>Purchase credits to power your auto-poster</p>
+                </div>
+
+                <div id="shopPackages" class="packages-grid"></div>
+
+                <div id="checkoutPanel" class="checkout-panel glass" style="display:none">
+                    <div class="checkout-inner">
+                        <div class="checkout-info">
+                            <h3 id="checkoutPkgName">Package</h3>
+                            <p id="checkoutPkgDesc">-</p>
+                            <div class="checkout-price" id="checkoutPrice">Rp0</div>
+                            <div class="checkout-timer"><span>⏱ Order expires in: </span><span class="timer-val" id="orderTimer">08:00:00</span></div>
+                            <div class="checkout-steps">
+                                <p>📋 <b>Cara Bayar:</b></p>
+                                <p>1. Transfer ke salah satu rekening di bawah ini</p>
+                                <p>2. Transfer <b>sesuai nominal</b> yang tertera</p>
+                                <p>3. Screenshot bukti transfer</p>
+                                <p>4. Kirim bukti ke admin, kredit akan ditambahkan</p>
+                            </div>
+                            <button class="btn-outline" onclick="cancelCheckout()">Cancel Order</button>
+                        </div>
+                        <div class="bank-side">
+                            <div class="bank-title">💳 Rekening Pembayaran</div>
+                            <div id="bankAccountsContainer"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ACCOUNT PAGE -->
+            <section class="page" id="page-account">
+                <div class="page-header">
+                    <h2>👤 Account</h2>
+                    <p>Your profile and settings</p>
+                </div>
+                <div class="account-card glass">
+                    <div class="account-avatar"><span id="accAvatar">U</span></div>
+                    <div class="account-info">
+                        <div class="info-row"><span>Username</span><b id="accUsername">—</b></div>
+                        <div class="info-row"><span>Email</span><b id="accEmail">—</b></div>
+                        <div class="info-row"><span>Role</span><b id="accRole">—</b></div>
+                        <div class="info-row"><span>Credits</span><b id="accCredits" class="highlight">0</b></div>
+                        <div class="info-row"><span>Member Since</span><b id="accJoined">—</b></div>
+                    </div>
+                </div>
+
+                <!-- Admin Panel (only visible to admin) -->
+                <div class="section-title" style="margin-top:2rem">🔧 Admin Panel</div>
+                    <div class="admin-grid glass">
+                        <div class="admin-section">
+                            <h4>Pending Orders</h4>
+                            <div id="pendingOrders" class="orders-list">Loading...</div>
+                        </div>
+                    </div>
+            </section>
+
+            <!-- HELP PAGE -->
+            <section class="page" id="page-help">
+                <div class="page-header">
+                    <h2>❓ Pusat Bantuan</h2>
+                    <p>Panduan lengkap cara menggunakan Djanenosa Post — dijelaskan sejelas mungkin!</p>
+                </div>
+
+                <div class="help-container">
+
+                    <div class="help-card glass">
+                        <div class="help-num">1</div>
+                        <div class="help-content">
+                            <h3>🔑 Apa itu Djanenosa Post?</h3>
+                            <p>Djanenosa Post adalah website untuk <b>auto-posting di Discord</b>. Artinya, kamu bisa menyuruh website ini untuk mengirimkan pesan secara otomatis ke banyak channel Discord sekaligus, kapanpun kamu mau — tanpa harus online!</p>
+                            <div class="help-tip">💡 Bayangkan kamu punya robot yang bisa mengirim pesan ke 30 channel Discord dalam hitungan detik, sementara kamu tidur.</div>
+                        </div>
+                    </div>
+
+                    <div class="help-card glass">
+                        <div class="help-num">2</div>
+                        <div class="help-content">
+                            <h3>💎 Apa itu Kredit?</h3>
+                            <p>Kredit adalah <b>"bahan bakar"</b> untuk menjalankan auto-poster. Setiap kali sistem berhasil mengirim pesan ke semua channel yang kamu tentukan (1 putaran), kredit berkurang <b>1</b>.</p>
+                            <ul class="help-list">
+                                <li>✅ Punya 10 kredit = bisa mengirim pesan sebanyak <b>10 putaran</b></li>
+                                <li>✅ 1 putaran = pesan dikirim ke SEMUA channel yang kamu masukkan</li>
+                                <li>❌ Jika kredit habis → auto-poster berhenti otomatis</li>
+                            </ul>
+                            <div class="help-tip">💡 Misalnya kamu set 3 channel dan 10 kredit = pesan terkirim ke 3 channel itu sebanyak 10 kali (=30 total pesan).</div>
+                        </div>
+                    </div>
+
+                    <div class="help-card glass">
+                        <div class="help-num">3</div>
+                        <div class="help-content">
+                            <h3>🛒 Cara Beli Kredit</h3>
+                            <ol class="help-list">
+                                <li>Klik menu <b>Shop</b> di sidebar kiri</li>
+                                <li>Pilih paket yang kamu mau (Starter, Basic, Pro, atau Elite)</li>
+                                <li>Klik tombol <b>"Buy Now"</b></li>
+                                <li>Akan muncul nomor rekening pembayaran dan nominal yang harus ditransfer</li>
+                                <li>Transfer uang ke salah satu rekening yang tertera (DANA atau Seabank)</li>
+                                <li>Screenshot/foto bukti transfernya</li>
+                                <li>Kirim bukti transfer ke admin melalui kontak yang tersedia</li>
+                                <li>Admin akan mengonfirmasi dan kredit langsung masuk ke akunmu!</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="help-card glass">
+                        <div class="help-num">4</div>
+                        <div class="help-content">
+                            <h3>⚡ Cara Pakai Console (Auto-Poster)</h3>
+                            <p>Console adalah tempat kamu menjalankan mesin auto-poster. Ikuti langkah-langkah ini:</p>
+                            <ol class="help-list">
+                                <li>Klik menu <b>Console</b> di sidebar kiri</li>
+                                <li><b>Discord Token</b>: Tempel token akun Discord kamu di sini. Token ini seperti "kunci" akun Discord kamu agar website bisa mengirim pesan atas namamu</li>
+                                <li><b>Token Type</b>: Kalau kamu pakai akun biasa Discord, pilih <em>"User Token"</em>. Kalau kamu developer dengan bot resmi, pilih <em>"Bot Token"</em></li>
+                                <li><b>Attach Image</b> (Opsional): Upload foto/gambar yang mau ikut dikirim bersama pesan</li>
+                                <li><b>Channel IDs</b>: Masukkan ID channel Discord yang mau dikirimi pesan. Pisahkan dengan koma atau enter jika ada lebih dari 1</li>
+                                <li><b>Message</b>: Tulis pesan yang mau dikirim. Bisa menggunakan format Discord: <code>**tebal**</code>, <code>*miring*</code>, <code>`kode`</code></li>
+                                <li><b>Batch Delay</b>: Jeda dalam detik antara setiap kelompok 10 channel. Contoh: isi 5 artinya setiap 5 detik lanjut ke channel berikutnya</li>
+                                <li><b>Loop Interval</b>: Jeda dalam detik setelah SEMUA channel selesai dikirim, sebelum memulai putaran baru. Contoh: 3600 = 1 jam</li>
+                                <li>Klik tombol <b>🚀 Start</b> untuk memulai!</li>
+                            </ol>
+                            <div class="help-tip">💡 Kotak "Live Log" di sebelah kanan akan menampilkan status pengiriman secara real-time — kamu bisa lihat kapan pesan dikirim dan ke channel mana!</div>
+                        </div>
+                    </div>
+
+                    <div class="help-card glass">
+                        <div class="help-num">5</div>
+                        <div class="help-content">
+                            <h3>🔍 Cara Cari Channel ID Discord</h3>
+                            <ol class="help-list">
+                                <li>Buka aplikasi Discord di PC/Laptop</li>
+                                <li>Klik ikon <b>⚙️ Settings (Pengaturan)</b> di pojok kiri bawah</li>
+                                <li>Klik <b>"Advanced"</b> (Lanjutan) di menu kiri</li>
+                                <li>Aktifkan <b>"Developer Mode"</b> (Mode Pengembang)</li>
+                                <li>Kembali ke channel yang mau kamu jadikan target</li>
+                                <li><b>Klik kanan</b> nama channel tersebut</li>
+                                <li>Pilih <b>"Copy Channel ID"</b></li>
+                                <li>Tempel ID tersebut ke kolom Channel IDs di Console!</li>
+                            </ol>
+                            <div class="help-tip">💡 Channel ID berupa angka panjang seperti ini: <code>1234567890123456789</code></div>
+                        </div>
+                    </div>
+
+                    <div class="help-card glass">
+                        <div class="help-num">6</div>
+                        <div class="help-content">
+                            <h3>🪙 Cara Dapat Token Discord</h3>
+                            <div class="help-warning">⚠️ <b>Peringatan:</b> Menggunakan User Token untuk otomatisasi melanggar Terms of Service Discord dan bisa menyebabkan akun kamu di-banned. Gunakan dengan risiko sendiri.</div>
+                            <ol class="help-list">
+                                <li>Buka Discord di <b>browser</b> (discord.com/app) — bukan aplikasi</li>
+                                <li>Login ke akun Discord kamu</li>
+                                <li>Tekan <b>F12</b> untuk membuka Developer Tools</li>
+                                <li>Klik tab <b>"Network"</b></li>
+                                <li>Ketik <code>messages</code> atau <code>science</code> di kolom filter</li>
+                                <li>Klik channel mana saja untuk memunculkan request</li>
+                                <li>Klik salah satu baris request yang muncul</li>
+                                <li>Cari bagian <b>"Request Headers"</b></li>
+                                <li>Salin nilai dari baris <b>Authorization:</b> — itulah token kamu!</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="help-card glass">
+                        <div class="help-num">7</div>
+                        <div class="help-content">
+                            <h3>🛑 Cara Stop Auto-Poster</h3>
+                            <ul class="help-list">
+                                <li>Klik tombol merah <b>🛑 Stop</b> di halaman Console</li>
+                                <li>Sistem akan berhenti dan kredit tidak akan berkurang lagi</li>
+                                <li>Kamu bisa mulai lagi kapanpun dengan mengklik 🚀 Start</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="help-card glass">
+                        <div class="help-num">8</div>
+                        <div class="help-content">
+                            <h3>📊 Halaman Home & Account</h3>
+                            <ul class="help-list">
+                                <li><b>Home</b>: Lihat ringkasan aktivitasmu — jumlah kredit, total putaran yang dijalankan, dan riwayat terakhir</li>
+                                <li><b>Account</b>: Lihat informasi profil akunmu: username, email, kredit, dan tanggal bergabung</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="help-card glass contact-card">
+                        <div class="help-num">📞</div>
+                        <div class="help-content">
+                            <h3>Butuh Bantuan Lebih Lanjut?</h3>
+                            <p>Jika ada pertanyaan atau masalah, hubungi admin:</p>
+                            <div class="contact-links">
+                                <span>💬 Discord: <b>djanenosa</b></span>
+                                <span>💰 DANA: <b>0889-8308-2523</b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- OWNER PAGE -->
+            <section class="page" id="page-owner">
+                <div class="page-header">
+                    <h2>👑 Owner Panel</h2>
+                    <p>Full system control — exclusive to <span class="highlight">Djanenosa</span></p>
+                </div>
+
+                <!-- System Stats -->
+                <div class="stats-grid" id="ownerStatsGrid">
+                    <div class="stat-card glass"><div class="stat-icon">👥</div><div><div class="stat-val" id="ownerTotalUsers">—</div><div class="stat-lbl">Total Users</div></div></div>
+                    <div class="stat-card glass"><div class="stat-icon">🚀</div><div><div class="stat-val" id="ownerTotalJobs">—</div><div class="stat-lbl">Total Jobs Run</div></div></div>
+                    <div class="stat-card glass"><div class="stat-icon">📨</div><div><div class="stat-val" id="ownerTotalChannels">—</div><div class="stat-lbl">Total Messages</div></div></div>
+                    <div class="stat-card glass"><div class="stat-icon">💰</div><div><div class="stat-val" id="ownerRevenue">—</div><div class="stat-lbl">Revenue (Rp)</div></div></div>
+                    <div class="stat-card glass"><div class="stat-icon">⚡</div><div><div class="stat-val" id="ownerActiveJobs">—</div><div class="stat-lbl">Active Jobs</div></div></div>
+                </div>
+
+                <!-- Active Jobs Control -->
+                <div class="section-title">⚡ Active Jobs</div>
+                <div class="glass" style="padding:1.25rem;display:flex;flex-direction:column;gap:.75rem">
+                    <div id="ownerActiveJobsList" class="log-empty">Loading...</div>
+                    <button class="btn-danger" style="width:fit-content" onclick="ownerForceStopAll()">🛑 Stop ALL Jobs</button>
+                </div>
+
+                <!-- Discount Control -->
+                <div class="section-title">🏷️ Diskon Shop</div>
+                <div class="glass" style="padding:1.25rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
+                    <div id="ownerDiscountDisplay" style="font-size:1.8rem;font-weight:800;color:var(--accent)">0%</div>
+                    <div style="flex:1">
+                        <input type="range" id="discountRange" min="0" max="100" step="5" value="0" style="width:100%" oninput="document.getElementById('discountVal').textContent=this.value+'%'">
+                        <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--text-muted)"><span>0%</span><span id="discountVal">0%</span><span>100%</span></div>
+                    </div>
+                    <button class="btn-primary" onclick="ownerSetDiscount()">Terapkan Diskon</button>
+                    <button class="btn-outline" onclick="ownerSetDiscountDirect(0)">Reset (0%)</button>
+                </div>
+
+                <!-- All Users Management -->
+                <div class="section-title">👥 User Management</div>
+                <div class="glass" style="padding:1.25rem">
+                    <div id="ownerUsersList" class="orders-list">Loading...</div>
+                </div>
+
+                <!-- Pending Orders -->
+                <div class="section-title">🛒 Pending Orders (All)</div>
+                <div class="glass" style="padding:1.25rem">
+                    <div id="ownerOrdersList" class="orders-list">Loading...</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
