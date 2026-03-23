@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@libsql/client": "^0.17.2",
     "bcryptjs": "^3.0.3",
     "better-sqlite3": "^12.8.0",
     "cors": "^2.8.6",
