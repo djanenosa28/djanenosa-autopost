@@ -1,15 +1,21 @@
 // db.js — Turso (libSQL) connection
-// Serverless-safe: creates client per import (stateless)
-
 const { createClient } = require('@libsql/client');
 
-if (!process.env.TURSO_DATABASE_URL || !process.env.TURSO_AUTH_TOKEN) {
-    throw new Error('[db.js] TURSO_DATABASE_URL and TURSO_AUTH_TOKEN must be set in .env');
+let url = process.env.TURSO_DATABASE_URL;
+const token = process.env.TURSO_AUTH_TOKEN;
+
+if (!url || !token) {
+    console.error('[db.js] Error: TURSO_DATABASE_URL or TURSO_AUTH_TOKEN missing');
+}
+
+// For better compatibility in some environments, ensure https:// if it's a turso.io URL
+if (url && url.startsWith('libsql://')) {
+    url = url.replace('libsql://', 'https://');
 }
 
 const db = createClient({
-    url:       process.env.TURSO_DATABASE_URL,
-    authToken: process.env.TURSO_AUTH_TOKEN,
+    url: url || '',
+    authToken: token || '',
 });
 
 module.exports = db;
