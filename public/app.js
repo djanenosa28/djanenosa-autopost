@@ -9,8 +9,9 @@ window._consoleJobs = {};
 function navigateTo(page) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    document.querySelectorAll('.bn-item').forEach(l => l.classList.remove('active'));
     document.getElementById(`page-${page}`).classList.add('active');
-    document.querySelector(`[data-page="${page}"]`).classList.add('active');
+    document.querySelectorAll(`[data-page="${page}"]`).forEach(el => el.classList.add('active'));
     if (page === 'home') loadHome();
     if (page === 'shop') loadShop();
     if (page === 'account') loadAccount();
@@ -28,10 +29,12 @@ async function init() {
         // Show ∞ for unlimited credits (-1)
         const credDisplay = currentUser.credits === -1 ? '∞' : currentUser.credits;
         document.getElementById('sbCredits').textContent = credDisplay;
+        const mCred = document.getElementById('sbCreditsMobile'); if (mCred) mCred.textContent = credDisplay;
         document.getElementById('accAvatar').textContent = currentUser.username[0].toUpperCase();
         // Show Owner nav link if owner
         if (currentUser.role === 'owner') {
             document.getElementById('ownerNavLink').style.display = 'flex';
+            const bnOwner = document.getElementById('ownerBnItem'); if (bnOwner) bnOwner.style.display = 'flex';
         }
         loadHome();
         initConsoleList(); // init console slot section visibility
@@ -54,6 +57,7 @@ async function refreshCredits() {
         currentUser = d;
         const credDisplay = d.credits === -1 ? '∞' : d.credits;
         document.getElementById('sbCredits').textContent = credDisplay;
+        const mCred = document.getElementById('sbCreditsMobile'); if (mCred) mCred.textContent = credDisplay;
         const hcEl = document.getElementById('homeCredits'); if (hcEl) hcEl.textContent = credDisplay;
         const acEl = document.getElementById('accCredits'); if (acEl) acEl.textContent = credDisplay;
     }
