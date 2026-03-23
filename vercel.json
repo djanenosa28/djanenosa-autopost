@@ -1,24 +1,12 @@
 {
   "version": 2,
-  "name": "djanenosa-autopost",
   "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
-    }
+    { "src": "server.js", "use": "@vercel/node" }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "server.js"
-    },
-    {
-      "src": "/dashboard",
-      "dest": "server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
+    { "src": "/api/(.*)", "dest": "server.js" },
+    { "src": "/dashboard", "dest": "server.js" },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "server.js" }
   ]
 }
