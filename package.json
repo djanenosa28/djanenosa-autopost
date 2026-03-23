@@ -12,12 +12,10 @@
   "dependencies": {
     "@libsql/client": "^0.17.2",
     "bcryptjs": "^3.0.3",
-    "better-sqlite3": "^12.8.0",
     "cookie-session": "^2.1.1",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
-    "express-session": "^1.19.0",
     "multer": "^2.1.1",
     "path-to-regexp": "^6.2.1"
   }
