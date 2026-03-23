@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 });
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
-app.use(cors({ origin: false })); // disable CORS for same-origin only
+app.use(cors());
 app.use(express.json({ limit: '512kb' }));
 app.use(express.urlencoded({ extended: true, limit: '512kb' }));
 app.use(express.static(path.join(__dirname, 'public')));

@@ -64,7 +64,7 @@
     </div>
 
     <script>
-        fetch('/api/auth/me').then(r => { if (r.ok) window.location = '/dashboard'; });
+        fetch('/api/auth/me').then(r => { if (r.ok) window.location = '/dashboard'; }).catch(()=>{});
 
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
@@ -79,13 +79,22 @@
             err.style.display = 'none';
             try {
                 const r = await fetch('/api/auth/login', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: loginUsername.value, password: loginPassword.value })
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: document.getElementById('loginUsername').value,
+                        password: document.getElementById('loginPassword').value
+                    })
                 });
                 const d = await r.json();
-                if (d.success) { window.location = '/dashboard'; }
-                else { err.textContent = d.error; err.style.display = 'block'; btn.textContent = 'Sign In →'; btn.disabled = false; }
-            } catch { err.textContent = 'Network error.'; err.style.display = 'block'; btn.textContent = 'Sign In →'; btn.disabled = false; }
+                if (d.success) { window.location = '/dashboard'; return; }
+                err.textContent = d.error || 'Login gagal.';
+                err.style.display = 'block';
+            } catch (ex) {
+                err.textContent = 'Server tidak bisa dihubungi. Pastikan server sedang berjalan.';
+                err.style.display = 'block';
+            }
+            btn.textContent = 'Sign In →'; btn.disabled = false;
         });
 
         document.getElementById('registerForm').addEventListener('submit', async e => {
@@ -96,13 +105,23 @@
             err.style.display = 'none'; succ.style.display = 'none';
             try {
                 const r = await fetch('/api/auth/register', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: regUsername.value, email: regEmail.value, password: regPassword.value })
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: document.getElementById('regUsername').value,
+                        email: document.getElementById('regEmail').value,
+                        password: document.getElementById('regPassword').value
+                    })
                 });
                 const d = await r.json();
-                if (d.success) { window.location = '/dashboard'; }
-                else { err.textContent = d.error; err.style.display = 'block'; btn.textContent = 'Create Account →'; btn.disabled = false; }
-            } catch { err.textContent = 'Network error.'; err.style.display = 'block'; btn.textContent = 'Create Account →'; btn.disabled = false; }
+                if (d.success) { window.location = '/dashboard'; return; }
+                err.textContent = d.error || 'Registrasi gagal.';
+                err.style.display = 'block';
+            } catch (ex) {
+                err.textContent = 'Server tidak bisa dihubungi. Pastikan server sedang berjalan.';
+                err.style.display = 'block';
+            }
+            btn.textContent = 'Create Account →'; btn.disabled = false;
         });
     </script>
 </body>
