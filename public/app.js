@@ -8,15 +8,13 @@ window._consoleJobs = {};
 // ─── Navigation ────────────────────────────────────────────────────────────
 function navigateTo(page) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-    document.querySelectorAll('.bn-item').forEach(l => l.classList.remove('active'));
+    document.querySelectorAll('.tnav-link, .mnd-link').forEach(l => l.classList.remove('active'));
     document.getElementById(`page-${page}`).classList.add('active');
     document.querySelectorAll(`[data-page="${page}"]`).forEach(el => el.classList.add('active'));
     if (page === 'home') loadHome();
     if (page === 'shop') loadShop();
     if (page === 'account') loadAccount();
     if (page === 'owner') loadOwnerPanel();
-    // Help page has static content, no load needed
 }
 
 // ─── Init ───────────────────────────────────────────────────────────────────
@@ -34,7 +32,7 @@ async function init() {
         // Show Owner nav link if owner
         if (currentUser.role === 'owner') {
             document.getElementById('ownerNavLink').style.display = 'flex';
-            const bnOwner = document.getElementById('ownerBnItem'); if (bnOwner) bnOwner.style.display = 'flex';
+            const om = document.getElementById('ownerMobileLink'); if (om) om.style.display = 'flex';
         }
         loadHome();
         initConsoleList(); // init console slot section visibility

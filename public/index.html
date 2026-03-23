@@ -6,242 +6,62 @@
     <title>Djanenosa Post — Auto-Poster Discord Premium</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        /* ─── Landing Page ─────────────────────────────────────────── */
-        .lp-header {
-            position: fixed; top: 0; left: 0; right: 0;
-            padding: 1.25rem 6%; display: flex;
-            justify-content: space-between; align-items: center;
-            z-index: 100; background: rgba(10,10,12,0.7);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        /* ─── Hero ──────────────────────────────────────────────────── */
-        .lp-hero {
-            min-height: 100vh; display: flex; align-items: center;
-            padding: 0 6%; padding-top: 80px;
-        }
-        .hero-split {
-            display: flex; flex-direction: column; gap: 3rem;
-            max-width: 1280px; margin: 0 auto; width: 100%;
-            align-items: center;
-        }
-        .hero-text { text-align: center; width: 100%; }
-        .hero-auth { width: 100%; max-width: 420px; }
-
-        .lp-hero h1 {
-            font-size: clamp(2.4rem, 5vw, 4.5rem);
-            font-weight: 900; line-height: 1.1;
-            margin-bottom: 1.25rem; letter-spacing: -2px;
-        }
-        .lp-hero .hero-sub {
-            font-size: clamp(.95rem, 1.4vw, 1.2rem);
-            color: var(--text-muted); margin: 0 auto 2rem;
-            line-height: 1.6; max-width: 600px;
-        }
-        .hero-buttons {
-            display: flex; justify-content: center;
-            gap: 1rem; flex-wrap: wrap;
-        }
-
-        /* Desktop: Side-by-side */
-        @media (min-width: 1024px) {
-            .hero-split {
-                flex-direction: row; gap: 5rem;
-                align-items: center; justify-content: space-between;
-            }
-            .hero-text { text-align: left; flex: 1; min-width: 0; }
-            .hero-text .hero-sub { margin: 0 0 2rem; }
-            .hero-buttons { justify-content: flex-start; }
-            .hero-auth { flex-shrink: 0; }
-        }
-
-        /* ─── Buttons ───────────────────────────────────────────────── */
-        .btn-giant {
-            padding: .9rem 2.2rem; font-size: 1rem; border-radius: 100px;
-            display: inline-flex; align-items: center; gap: 10px;
-            text-decoration: none; font-weight: 600;
-            transition: transform .2s, box-shadow .2s;
-        }
-        .btn-giant:hover { transform: scale(1.04); }
-        .btn-outline-white {
-            background: transparent; border: 1px solid rgba(255,255,255,.2);
-            color: #fff;
-        }
-        .btn-outline-white:hover { background: rgba(255,255,255,.05); }
-
-        /* Override .btn-outline for landing page since dashboard has its own */
-        .lp-hero .btn-outline, .btn-outline.btn-giant { border: 1px solid rgba(255,255,255,.2); color: #fff; background: transparent; }
-        .lp-hero .btn-outline:hover { background: rgba(255,255,255,.05); transform: scale(1.04); }
-
-        /* ─── Features ──────────────────────────────────────────────── */
-        .lp-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem; padding: 5rem 6%;
-            background: rgba(255,255,255,0.015);
-            border-top: 1px solid rgba(255,255,255,.04);
-            border-bottom: 1px solid rgba(255,255,255,.04);
-        }
-        .feat-card {
-            padding: 2.25rem; border-radius: 16px;
-            border: 1px solid rgba(255,255,255,.05);
-            background: rgba(20,20,25,0.5);
-            transition: all .35s cubic-bezier(.165,.84,.44,1);
-        }
-        .feat-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(255,255,255,.15);
-            background: rgba(30,30,35,.7);
-        }
-        .feat-icon { font-size: 2.5rem; margin-bottom: 1.25rem; display: block; }
-        .feat-card h3 { font-size: 1.2rem; margin-bottom: .65rem; font-weight: 700; }
-        .feat-card p { color: var(--text-muted); line-height: 1.65; font-size: .9rem; }
-
-        /* ─── Footer ─────────────────────────────────────────────────── */
-        .lp-footer {
-            text-align: center; padding: 2.5rem 6%;
-            border-top: 1px solid rgba(255,255,255,.05);
-            font-size: .9rem; color: var(--text-muted);
-            background: rgba(10,10,12,.8);
-        }
-
-        /* ─── Auth card override ─────────────────────────────────────── */
-        .auth-card {
-            box-shadow: 0 20px 60px rgba(0,0,0,.55);
-            border: 1px solid rgba(255,255,255,.08);
-            background: rgba(20,20,25,.45);
-            backdrop-filter: blur(16px);
-        }
-
-        /* Animations */
-        @keyframes fadeInUp { from { opacity:0; transform:translateY(28px) } to { opacity:1; transform:translateY(0) } }
-        html { scroll-behavior: smooth; }
-
-        /* Mobile tweaks */
-        @media (max-width: 1023px) {
-            .lp-hero { padding-top: 90px; min-height: auto; padding-bottom: 3rem; }
-            .btn-giant { width: 100%; justify-content: center; padding: .8rem 1.5rem; font-size: .95rem; }
-            .lp-features { padding: 3.5rem 6%; gap: 1rem; }
-            .feat-card { padding: 1.5rem; }
-        }
-    </style>
 </head>
-<body class="auth-page" style="overflow-x: hidden;">
-    <!-- Minimal Background -->
-
-    <!-- Header -->
-    <header class="lp-header">
-        <div class="auth-brand" style="margin:0">
-            <div class="brand-icon" style="width:28px;height:28px">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.001.022.01.043.027.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+<body class="auth-page">
+    <div class="lp-wrap">
+        <!-- Brand -->
+        <div class="lp-brand">
+            <div class="brand-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.001.022.01.043.027.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
             </div>
-            <h1 style="font-size:1.4rem">Djanenosa <span>Post</span></h1>
+            <span class="lp-brand-name">Djanenosa <b>Post</b></span>
         </div>
-        <a href="#mulai" class="btn-primary" style="padding:.6rem 1.5rem;font-size:.9rem;border-radius:100px;font-weight:600;">Log In / Daftar</a>
-    </header>
 
-    <!-- Hero Section -->
-    <section class="lp-hero">
-        <div class="hero-split">
-            <!-- Left Text Content -->
-            <div class="hero-text">
-                <h1 style="opacity:0; animation:fadeInUp 0.8s forwards">Otomatiskan Kehadiran<br><span style="color:var(--text);">Discord Kamu</span></h1>
-                <p class="hero-sub" style="opacity:0; animation:fadeInUp 0.8s forwards 0.2s">Djanenosa Post adalah platform as-a-service premium untuk Auto-Poster Discord.<br>Kirim ratusan pesan promosi ke banyak channel sekaligus cukup dengan satu klik.</p>
-                
-                <div class="hero-buttons" style="opacity:0; animation:fadeInUp 0.8s forwards 0.4s;">
-                    <a href="#fitur" class="btn-giant btn-outline">Pelajari Modul &amp; Fitur ↓</a>
+        <!-- Tagline -->
+        <p class="lp-tagline">Platform Auto-Poster Discord Premium 🚀</p>
+
+        <!-- Auth Card -->
+        <div class="auth-card glass lp-card">
+            <div class="tab-switcher">
+                <button class="tab-btn active" data-tab="login" onclick="switchTab('login')">Sign In</button>
+                <button class="tab-btn" data-tab="register" onclick="switchTab('register')">Sign Up</button>
+            </div>
+
+            <form id="loginForm" class="auth-form active">
+                <div class="field-group">
+                    <label>Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter your username" required autocomplete="username">
                 </div>
-            </div>
-
-            <!-- Right Auth Form -->
-            <div class="hero-auth" id="mulai">
-                <div class="auth-card glass" style="margin:0; width:100%; max-width:100%">
-                    <div class="auth-brand" style="margin-bottom:1.5rem; justify-content:center;">
-                        <h2 style="font-size:1.3rem; margin:0;">Mulai Bersama <span style="font-weight:900;">Djanenosa</span></h2>
-                    </div>
-
-                    <div class="tab-switcher">
-                        <button class="tab-btn active" data-tab="login" onclick="switchTab('login')">Sign In</button>
-                        <button class="tab-btn" data-tab="register" onclick="switchTab('register')">Sign Up</button>
-                    </div>
-
-                    <form id="loginForm" class="auth-form active">
-                        <div class="field-group">
-                            <label>Username</label>
-                            <input type="text" id="loginUsername" placeholder="Enter your username" required autocomplete="username">
-                        </div>
-                        <div class="field-group">
-                            <label>Password</label>
-                            <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
-                        </div>
-                        <div id="loginError" class="form-error" style="display:none"></div>
-                        <button type="submit" class="btn-primary full-width" style="padding:1rem;font-size:1.05rem;font-weight:600;margin-top:1rem">Sign In <span>→</span></button>
-                    </form>
-
-                    <form id="registerForm" class="auth-form">
-                        <div class="field-group">
-                            <label>Username</label>
-                            <input type="text" id="regUsername" placeholder="Choose a username" required>
-                        </div>
-                        <div class="field-group">
-                            <label>Email</label>
-                            <input type="email" id="regEmail" placeholder="your@email.com" required>
-                        </div>
-                        <div class="field-group">
-                            <label>Password</label>
-                            <input type="password" id="regPassword" placeholder="Min. 6 characters" required>
-                        </div>
-                        <div id="regError" class="form-error" style="display:none"></div>
-                        <div id="regSuccess" class="form-success" style="display:none"></div>
-                        <button type="submit" class="btn-primary full-width" style="padding:1rem;font-size:1.05rem;font-weight:600;margin-top:1rem">Create Account <span>→</span></button>
-                    </form>
+                <div class="field-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
                 </div>
-            </div>
-        </div>
-    </section>
+                <div id="loginError" class="form-error" style="display:none"></div>
+                <button type="submit" class="btn-primary full-width" style="margin-top:.5rem">Sign In →</button>
+            </form>
 
-    <!-- Features Section -->
-    <section id="fitur" class="lp-features">
-        <div class="feat-card">
-            <span class="feat-icon">⚡</span>
-            <h3>Paralel Console</h3>
-            <p>Jalankan beberapa tugas "Console" secara bersamaan seperti memakai komputer server sendiri. Kirim pesan auto lewat ribuan token dan channel berbeda tanpa antre.</p>
+            <form id="registerForm" class="auth-form">
+                <div class="field-group">
+                    <label>Username</label>
+                    <input type="text" id="regUsername" placeholder="Choose a username" required>
+                </div>
+                <div class="field-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" placeholder="your@email.com" required>
+                </div>
+                <div class="field-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" placeholder="Min. 6 characters" required>
+                </div>
+                <div id="regError" class="form-error" style="display:none"></div>
+                <div id="regSuccess" class="form-success" style="display:none"></div>
+                <button type="submit" class="btn-primary full-width" style="margin-top:.5rem">Create Account →</button>
+            </form>
         </div>
-        <div class="feat-card">
-            <span class="feat-icon">🛡️</span>
-            <h3>Prioritas Keamanan</h3>
-            <p>Sistem kami dirancang sangat mengerti "Rate Limit" bawaan Discord API. Djanenosa secara otomatis meregulasi jeda pesan agar akun/token kamu tetap hijau dan aman dari ban.</p>
-        </div>
-        <div class="feat-card">
-            <span class="feat-icon">🖼️</span>
-            <h3>Dukungan Semua Media</h3>
-            <p>Butuh menyebar katalog produk komersial atau promosi in-game? Ketik caption memukau memakai Markdown dan lampirkan file visual layaknya menggunakan Discord asli.</p>
-        </div>
-        <div class="feat-card">
-            <span class="feat-icon">📡</span>
-            <h3>Live Streaming Log</h3>
-            <p>Pantau semua proses eksekusi secara real-time lewat Telemetry Log. Kamu dapat mengetahui rincian channel mana yang sukses terkirim maupun yang terhalang timeout.</p>
-        </div>
-        <div class="feat-card">
-            <span class="feat-icon">🌐</span>
-            <h3>Berjalan di Cloud</h3>
-            <p>Lupakan PC menyala 24 jam. Atur program auto-poster, tekan Start, lalu tutup website ini. Server cloud kami akan terus mengeksekusi pesanmu di latar belakang!</p>
-        </div>
-        <div class="feat-card">
-            <span class="feat-icon">🛒</span>
-            <h3>Shop Terintegrasi</h3>
-            <p>Beli Slot Console ekstra dan Top-Up kredit dengan mudah melalui sistem manajemen mandiri dengan konfirmasi seketika oleh Owner.</p>
-        </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="lp-footer">
-        <div style="font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:.5rem;">Djanenosa Post Platform</div>
-        &copy; 2026 Djanenosa Post. All rights reserved.<br>
-        <span style="opacity:0.5;font-size:0.8rem">Solusi Premium Auto-Poster Discord Terbaik dan Terpercaya.</span>
-    </footer>
+        <!-- Footer -->
+        <p class="lp-footer-txt">© 2026 Djanenosa Post. All rights reserved.</p>
+    </div>
 
     <script>
         fetch('/api/auth/me').then(r => { if (r.ok) window.location = '/dashboard'; });
